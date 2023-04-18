@@ -142,10 +142,17 @@ exp_lin_test <- function(y, data=NULL,
     AV <- aux_case_lin(theta=theta)$AVL
   }
   
+  # The p.value of T assuming N(AM, AV)
+  lower.tail <- H0 == "Data come from exponential"
+  
+  p.value <- pnorm(q=T, mean=AM, sd=sqrt(AV),
+                   lower.tail=lower.tail)
+  
   list(T=T, 
        lambda=lambda, 
        theta=theta,
-       AM=AM, AV=AV)
+       AM=AM, AV=AV,
+       p.value=p.value)
   
   # res <- list(statistic=T)
   # class(res) <- "htest"
