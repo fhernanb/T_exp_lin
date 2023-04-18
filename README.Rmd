@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# T statistic to distinguish between distributions (Exponential and Lindley)
+# T statistic to distinguish between distributions Exponential and Lindley
 
 <!-- badges: start -->
 <!-- badges: end -->
