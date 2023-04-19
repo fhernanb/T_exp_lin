@@ -112,8 +112,8 @@ aux_case_lin <- function(theta) {
 # Main function to perform the test
 
 exp_lin_test <- function(y, data=NULL, 
-                         H0=c("Data come from exponential",
-                              "Data come from Lindley")) {
+                         alternative=c("not.exp",
+                                       "not.lin")) {
   # To fit both models
   mod1 <- gamlss(y ~ 1, family=EXP, data=data,
                  control=gamlss.control(trace=FALSE))
@@ -126,39 +126,54 @@ exp_lin_test <- function(y, data=NULL,
   
   # To convert
   lambda <- as.numeric(lambda)
-  theta <- as.numeric(theta)
+  theta  <- as.numeric(theta)
   
   # To obtain T using loglik values
-  T <- as.numeric(logLik(mod1) - logLik(mod2))
+  statistic <- as.numeric(logLik(mod1) - logLik(mod2))
   
   # To obtain the NULL distribution of T
-  if (H0 == "Data come from exponential") {
+  if (alternative == "not.exp") {
     AM <- aux_case_exp(lambda=lambda)$AME
     AV <- aux_case_exp(lambda=lambda)$AVE
   }
   
-  if (H0 == "Data come from Lindley") {
+  if (alternative == "not.lin") {
     AM <- aux_case_lin(theta=theta)$AML
     AV <- aux_case_lin(theta=theta)$AVL
   }
   
   # The p.value of T assuming N(AM, AV)
-  lower.tail <- H0 == "Data come from exponential"
+  lower.tail <- alternative == "not.exp"
   
-  p.value <- pnorm(q=T, mean=AM, sd=sqrt(AV),
+  p.value <- pnorm(q=statistic, mean=AM, sd=sqrt(AV),
                    lower.tail=lower.tail)
   
-  list(T=T, 
-       lambda=lambda, 
-       theta=theta,
-       AM=AM, AV=AV,
-       p.value=p.value)
+  # To ensure that the output values are in the correct form
+  method <- "Exponential-Lindley test"
+  names(statistic) <- 'T'
+  data.name <- deparse(substitute(x))
   
-  # res <- list(statistic=T)
-  # class(res) <- "htest"
-  # return(res)
+  # To obtain appropiate information about
+  # sample and distribution of T
+  estimate <- ifelse(alternative=="not.exp", lambda, theta)
+  estimate <- c(estimate, AM, AV)
+  names_for_first_element <- ifelse(alternative=="not.exp", 
+                                    "lambda_hat", 
+                                    "theta_hat")
+  names(estimate) <- c(names_for_first_element,
+                       "AV for T",
+                       "AM for T")
+  
+  res <- list(statistic=statistic,
+              p.value=p.value,
+              estimate=estimate,
+              method=method,
+              alternative=alternative,
+              lambda=lambda, 
+              theta=theta,
+              AM=AM, AV=AV)
+  
+  class(res) <- "htest"
+  return(res)
 }
-
-
-
 
