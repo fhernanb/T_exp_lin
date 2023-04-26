@@ -46,7 +46,7 @@ exp_lin_test(y, alternative="not.exp", type="left")
 
 # Example 4
 # Lindley case with 40% of right censored observations
-mu <- 1/3
+mu <- 3
 n <- 50
 set.seed(123456)
 y <- rLIN(n=n, mu=mu)
