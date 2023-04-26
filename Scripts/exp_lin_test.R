@@ -113,11 +113,45 @@ aux_case_lin <- function(theta) {
 
 exp_lin_test <- function(y, data=NULL, 
                          alternative=c("not.exp",
-                                       "not.lin")) {
+                                       "not.lin"),
+                         type=c("no-cens", "left", "right", "interval")) {
+  
+  # To define the right Family with or without censoring
+  
+  # No censored data
+  if (type == "no-cens") {
+    FAM_EXP <- "EXP"
+    FAM_LIN <- "LIN"
+  }
+  
+  # left censored data
+  if (type == "left") {
+    gen.cens(EXP, type="left")
+    gen.cens(LIN, type="left")
+    FAM_EXP <- "EXPlc"
+    FAM_LIN <- "LINlc"
+  }
+  
+  # right censored data
+  if (type == "right") {
+    gen.cens(EXP, type="right")
+    gen.cens(LIN, type="right")
+    FAM_EXP <- "EXPrc"
+    FAM_LIN <- "LINrc"
+  }
+  
+  # interval censored data
+  if (type == "interval") {
+    gen.cens(EXP, type="interval")
+    gen.cens(LIN, type="interval")
+    FAM_EXP <- "EXPic"
+    FAM_LIN <- "LINic"
+  }
+  
   # To fit both models
-  mod1 <- gamlss(y ~ 1, family=EXP, data=data,
+  mod1 <- gamlss(y ~ 1, family=FAM_EXP, data=data,
                  control=gamlss.control(trace=FALSE))
-  mod2 <- gamlss(y ~ 1, family=LIN, data=data,
+  mod2 <- gamlss(y ~ 1, family=FAM_LIN, data=data,
                  control=gamlss.control(trace=FALSE))
   
   # To obtain the estimated parameters
