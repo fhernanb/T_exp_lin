@@ -5,6 +5,7 @@ library(gamlss.cens)
 library(survival)
 
 source("https://raw.githubusercontent.com/fhernanb/T_exp_lin/main/Scripts/exp_lin_test.R")
+source("https://raw.githubusercontent.com/fhernanb/T_exp_lin/main/Scripts/my_censored_function.rds")
 
 # Example 1
 # Exponential case
