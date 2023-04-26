@@ -126,24 +126,18 @@ exp_lin_test <- function(y, data=NULL,
   
   # left censored data
   if (type == "left") {
-    gen.cens(EXP, type="left")
-    gen.cens(LIN, type="left")
     FAM_EXP <- "EXPlc"
     FAM_LIN <- "LINlc"
   }
   
   # right censored data
   if (type == "right") {
-    gen.cens(EXP, type="right")
-    gen.cens(LIN, type="right")
     FAM_EXP <- "EXPrc"
     FAM_LIN <- "LINrc"
   }
   
   # interval censored data
   if (type == "interval") {
-    gen.cens(EXP, type="interval")
-    gen.cens(LIN, type="interval")
     FAM_EXP <- "EXPic"
     FAM_LIN <- "LINic"
   }
