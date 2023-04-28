@@ -128,18 +128,24 @@ exp_lin_test <- function(y, data=NULL,
   if (type == "left") {
     FAM_EXP <- "EXPlc"
     FAM_LIN <- "LINlc"
+    do.call(what=gen.cens, args=c(family=EXP, type="left"), envir = parent.frame(n = 1))
+    do.call(what=gen.cens, args=c(family=LIN, type="left"), envir = parent.frame(n = 1))
   }
   
   # right censored data
   if (type == "right") {
     FAM_EXP <- "EXPrc"
     FAM_LIN <- "LINrc"
+    do.call(what=gen.cens, args=c(family=EXP, type="right"), envir = parent.frame(n = 1))
+    do.call(what=gen.cens, args=c(family=LIN, type="right"), envir = parent.frame(n = 1))
   }
   
   # interval censored data
   if (type == "interval") {
     FAM_EXP <- "EXPic"
     FAM_LIN <- "LINic"
+    do.call(what=gen.cens, args=c(family=EXP, type="interval"), envir = parent.frame(n = 1))
+    do.call(what=gen.cens, args=c(family=LIN, type="interval"), envir = parent.frame(n = 1))
   }
   
   # To fit both models
