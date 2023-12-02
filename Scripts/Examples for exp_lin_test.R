@@ -1,8 +1,7 @@
 
-library(gamlss)
-library(RelDists)
-library(gamlss.cens)
-library(survival)
+library(gamlss)      # To estimate parameters and use dEXP dist
+library(gamlss.cens) # For censored data
+library(RelDists)    # To use dLIN dist
 
 # Here we have the main functions to perform the test
 source("https://raw.githubusercontent.com/fhernanb/T_exp_lin/main/Scripts/exp_lin_test.R")
