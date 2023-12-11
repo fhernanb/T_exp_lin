@@ -213,10 +213,10 @@ exp_lin_test <- function(y, t0=NULL, n,
     statistic <- log_lik_exp - log_lik_lin
   }
   
-  print("The estimated parameter assuming Exponential is:")
-  print(paste0("lambda_hat = ", lambda_hat))
-  print("The estimated parameter assuming Lindley is:")
-  print(paste0("theta_hat = ", theta_hat))
+  # print("The estimated parameter assuming Exponential is:")
+  # print(paste0("lambda_hat = ", lambda_hat))
+  # print("The estimated parameter assuming Lindley is:")
+  # print(paste0("theta_hat = ", theta_hat))
   
   # Re-naming the estimated parameters in short form
   lambda <- lambda_hat

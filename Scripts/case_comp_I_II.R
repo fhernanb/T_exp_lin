@@ -75,14 +75,14 @@ parSim(
   n = c(20, 40, 60, 80, 100, 200),
   dist = c("EXP", "LIN"),
   #p_cens = c(0, 0.1, 0.2),
-  p_cens = c(0),
+  p_cens = c(0.1, 0.2),
   #type = c("complete", "I", "II"),
-  type = c("complete"),
-  #type = c("I", "II"),
+  #type = c("complete"),
+  type = c("I", "II"),
   
-  reps = 4900,                        # Repetitions
+  reps = 3900,                        # Repetitions
   write = TRUE,                    # Writing to a file
-  name = "Simul/simuls5",           # Name of the file
+  name = "Simul/simuls6",           # Name of the file
   nCores = 1,                      # Number of cores to use
   
   expression = {
@@ -110,8 +110,9 @@ datos2 <- read.table("Simul/simuls2.txt", header = TRUE)
 datos3 <- read.table("Simul/simuls3.txt", header = TRUE)
 datos4 <- read.table("Simul/simuls4.txt", header = TRUE)
 datos5 <- read.table("Simul/simuls5.txt", header = TRUE)
+datos6 <- read.table("Simul/simuls6.txt", header = TRUE)
 
-datos <- rbind(datos1, datos2, datos3, datos4, datos5)
+datos <- rbind(datos1, datos2, datos3, datos4, datos5, datos6)
 
 library(dplyr)
 
@@ -196,6 +197,13 @@ p4 <- ggplot(res_II_02, aes(x=n, y=pcs, group=mu)) +
   ggtitle("PCS for a random sample with type II censoring and 20% of censoring")
 
 p4
+
+ggsave("Plots/complete.pdf", plot = p0, width = 8, height = 4)
+ggsave("Plots/type_I_10.pdf", plot = p1, width = 8, height = 4)
+ggsave("Plots/type_I_20.pdf", plot = p2, width = 8, height = 4)
+ggsave("Plots/type_II_10.pdf", plot = p3, width = 8, height = 4)
+ggsave("Plots/type_II_20.pdf", plot = p4, width = 8, height = 4)
+
 
 
 

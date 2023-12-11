@@ -64,9 +64,9 @@ exp_lin_test(y, alternative="not.lin", type="I", n=n, t0=t0)
 # Example 5
 # Exponential case with Type II censoring
 lambda <- 3
-nobs <- 100
+nobs <- 500
 set.seed(123)
-y <- rexp(n=n, rate=lambda)
+y <- rexp(n=nobs, rate=lambda)
 n <- nobs + 10  # Assuming that 10 items were not observed
 
 # Applying the test
@@ -76,10 +76,10 @@ exp_lin_test(y, alternative="not.exp", type="II", n=n)
 # Example 6
 # Lindley case with Type II censoring
 theta <- 3
-nobs <- 100
-set.seed(1234)
-y <- rLIN(n=n, mu=theta)
-n <- nobs + 10  # Assuming that 10 items were not observed
+nobs <- 500
+set.seed(123)
+y <- rLIN(n=nobs, mu=theta)
+n <- nobs + 5  # Assuming that 5 items were not observed
 
 # Applying the test
 exp_lin_test(y, alternative="not.lin", type="II", n=n)
