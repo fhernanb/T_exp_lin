@@ -74,12 +74,15 @@ parSim(
   mu = c(0.1, 0.5, 0.9, 1.3, 1.5, 2.0, 2.5),
   n = c(20, 40, 60, 80, 100, 200),
   dist = c("EXP", "LIN"),
-  p_cens = c(0, 0.1, 0.2),
-  type = c("complete", "I", "II"),
+  #p_cens = c(0, 0.1, 0.2),
+  p_cens = c(0),
+  #type = c("complete", "I", "II"),
+  type = c("complete"),
+  #type = c("I", "II"),
   
-  reps = 1000,                        # Repetitions
+  reps = 4900,                        # Repetitions
   write = TRUE,                    # Writing to a file
-  name = "Simul/simuls2",           # Name of the file
+  name = "Simul/simuls5",           # Name of the file
   nCores = 1,                      # Number of cores to use
   
   expression = {
@@ -102,7 +105,13 @@ parSim(
 
 # To load the results -----------------------------------------------------
 
-datos <- read.table("Simul/simuls1.txt", header = TRUE)
+datos1 <- read.table("Simul/simuls1.txt", header = TRUE)
+datos2 <- read.table("Simul/simuls2.txt", header = TRUE)
+datos3 <- read.table("Simul/simuls3.txt", header = TRUE)
+datos4 <- read.table("Simul/simuls4.txt", header = TRUE)
+datos5 <- read.table("Simul/simuls5.txt", header = TRUE)
+
+datos <- rbind(datos1, datos2, datos3, datos4, datos5)
 
 library(dplyr)
 
@@ -111,29 +120,29 @@ datos <- datos |> mutate(mu = factor(mu))
 
 # To summarise pcs for each case
 res_comp <- datos %>% 
-  filter(type == "complete") %>% 
+  filter(type == "complete" & p_cens == 0) %>% 
   group_by(mu, n, dist, type, p_cens) %>% 
-  summarise(pcs=mean(dist == decision))
+  summarise(pcs=mean(dist == decision), nrep=n())
 
 res_I_01 <- datos %>% 
   filter(type == "I" & p_cens == 0.1) %>% 
   group_by(mu, n, dist, type, p_cens) %>% 
-  summarise(pcs=mean(dist == decision))
+  summarise(pcs=mean(dist == decision), nrep=n())
 
 res_I_02 <- datos %>% 
   filter(type == "I" & p_cens == 0.2) %>% 
   group_by(mu, n, dist, type, p_cens) %>% 
-  summarise(pcs=mean(dist == decision))
+  summarise(pcs=mean(dist == decision), nrep=n())
 
 res_II_01 <- datos %>% 
   filter(type == "II" & p_cens == 0.1) %>% 
   group_by(mu, n, dist, type, p_cens) %>% 
-  summarise(pcs=mean(dist == decision))
+  summarise(pcs=mean(dist == decision), nrep=n())
 
 res_II_02 <- datos %>% 
   filter(type == "II" & p_cens == 0.2) %>% 
   group_by(mu, n, dist, type, p_cens) %>% 
-  summarise(pcs=mean(dist == decision))
+  summarise(pcs=mean(dist == decision), nrep=n())
 
 # To plot
 library(ggplot2)
