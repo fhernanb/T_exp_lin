@@ -280,7 +280,7 @@ exp_lin_test <- function(y, delta=NULL,
     # To estimate theta
     theta_hat <- (-(mean(y)-1)+sqrt((mean(y)-1)^2+8*mean(y))) / (2*mean(y))
     
-    log_lik_exp <- sum(dEXP(x=y, mu=1/lambda_hat, log=TRUE))
+    log_lik_exp <- sum(dexp(x=y, rate=lambda_hat, log=TRUE))
     log_lik_lin <- sum(dLIN(x=y, mu=theta_hat, log=TRUE))
     
     # The T statistic
@@ -335,8 +335,8 @@ exp_lin_test <- function(y, delta=NULL,
                          n=length(y),
                          t0=t0)$root
 
-    log_lik_exp <- sum(dEXP(x=y_obs, mu=1/lambda_hat, log=TRUE)) +
-      (n-d) * log(1 - pEXP(q=t0, mu=1/lambda_hat))
+    log_lik_exp <- sum(dexp(x=y_obs, rate=lambda_hat, log=TRUE)) +
+      (n-d) * log(1 - pexp(q=t0, rate=lambda_hat))
     log_lik_lin <- sum(dLIN(x=y_obs, mu=theta_hat, log=TRUE)) +
       (n-d) * log(1 - pLIN(q=t0, mu=theta_hat))
 
