@@ -94,21 +94,18 @@ AME_AVE_complete <- function(lambda) {
   list(AME=AME, AVE=AVE, theta_tilde_complete=theta)
 }
 
-AME_AVE_censored <- function(lambda, t0, n, delta) {
+AME_AVE_censored <- function(lambda, t0, delta) {
   
   theta <- theta_tilde_complete(lambda=lambda)
   
-  # Integrando desde 0 hasta infinito
-  #part1 <- AME_AVE_complete(lambda)$AME
-  
-  # Encontrando part1 integrando desde 0 hasta t0
-  aux <- function(x, lambda, theta) {
+  # Finding AM
+  aux1 <- function(x, lambda, theta) {
     p1 <- log(lambda) - lambda*x
     p2 <- 2*log(theta) + log(1+x) - log(1+theta) - theta*x
     return((p1 - p2) * lambda * exp(-lambda*x))
   }
   
-  part1 <- integrate(f=aux, 
+  part1 <- integrate(f=aux1, 
                      lower=0, 
                      upper=t0, 
                      lambda=lambda, 
@@ -118,10 +115,44 @@ AME_AVE_censored <- function(lambda, t0, n, delta) {
   
   AME <- part1 + (1-delta) * part2
   
-  AVE <- delta^2 * AME_AVE_complete(lambda)$AVE
+  # Finding AV
+  
+  aux3 <- function(x, lambda, theta) {
+    p1 <- log(lambda) - lambda*x
+    p2 <- 2*log(theta) + log(1+x) - log(1+theta) - theta*x
+    return((p1 - p2)^2 * lambda * exp(-lambda*x))
+  }
+  
+  part3 <- integrate(f=aux3,
+                     lower=0,
+                     upper=t0,
+                     lambda=lambda,
+                     theta=theta)$value
+  
+  part4 <- dexp(x=t0, rate=lambda) * log(dexp(x=t0, rate=lambda) / dLIN(x=t0, mu=theta))
+  
+  part5 <- part1 * dexp(x=t0, rate=lambda) / delta
+  
+  h_fun <- function(x, lambda, theta) {
+    p1 <- 1 - pexp(q=x, rate=lambda)
+    p2 <- 1 - pLIN(q=x, mu=theta)
+    return(log(p1/p2))
+  }
+  
+  library(numDeriv)
+  deriv_h <- grad(func=h_fun, x=t0, lambda=lambda, theta=theta)
+  
+  part6 <- (1-delta) * deriv_h
+  
+  b <- - part4 + part5 - part6
+  
+  tau <- part3 - part1^2 / delta
+  
+  AVE <- tau + delta * (1-delta) * b^2 / (dexp(x=t0, rate=lambda))^2
   
   list(AME=AME, AVE=AVE, theta_tilde_complete=theta)
 }
+
 
 # Function to obtain AML and AVL in Lindley case
 AML_AVL_complete <- function(theta) {
@@ -174,27 +205,60 @@ AML_AVL_censored <- function(theta, t0, delta) {
   
   lambda <- lambda_tilde_complete(theta=theta)
   
-  # Encontrando part1 integrando desde 0 hasta t0
-  aux <- function(x, lambda, theta) {
+  # Finding AM
+  aux1 <- function(x, lambda, theta) {
     p1 <- log(lambda) - lambda*x
-    p2 <- log(theta^2) + log(1+x) - log(1+theta) - theta*x
+    p2 <- 2*log(theta) + log(1+x) - log(1+theta) - theta*x
     return((p1 - p2) * theta^2*(1+x)*exp(-theta*x)/(1+theta))
   }
   
-  part1 <- integrate(f=aux, 
+  part1 <- integrate(f=aux1, 
                      lower=0, 
                      upper=t0, 
                      lambda=lambda, 
                      theta=theta)$value
   
   part2 <- -lambda*t0-log(theta+1+theta*t0)+theta*t0+log(theta+1)
-  AML <- part1 + (1-delta) * part2
   
-  AVL <- delta^2 * AML_AVL_complete(theta)$AVL
+  AML <- part1 + (1-delta) * part2 
   
-  list(AML=AML, AVL=AVL,lambda_tilde_complete=lambda)
+  # Finding AV
+  
+  aux3 <- function(x, lambda, theta) {
+    p1 <- log(lambda) - lambda*x
+    p2 <- log(theta^2) + log(1+x) - log(1+theta) - theta*x
+    return((p1 - p2)^2 * theta^2*(1+x)*exp(-theta*x)/(1+theta))
+  }
+  
+  part3 <- integrate(f=aux3, 
+                     lower=0, 
+                     upper=t0, 
+                     lambda=lambda, 
+                     theta=theta)$value
+  
+  part4 <- dLIN(x=t0, mu=theta) * log(dexp(x=t0, rate=lambda) / dLIN(x=t0, mu=theta))
+  
+  part5 <- part1 * dLIN(x=t0, mu=theta) / delta
+  
+  h_fun <- function(x, lambda, theta) {
+    p1 <- 1 - pexp(q=x, rate=lambda)
+    p2 <- 1 - pLIN(q=x, mu=theta)
+    return(log(p1/p2))
+  }
+  
+  library(numDeriv)
+  deriv_h <- grad(func=h_fun, x=t0, lambda=lambda, theta=theta)
+  
+  part6 <- (1-delta) * deriv_h
+  
+  b <- part4 - part5 + part6
+  
+  tau <- part3 - part1^2 / delta
+  
+  AVL <- tau + delta * (1-delta) * b^2 / (dLIN(x=t0, mu=theta))^2
+  
+  list(AML=AML, AVL=AVL, lambda_tilde_complete=lambda)
 }
-
 
 # Main function to perform the test
 
