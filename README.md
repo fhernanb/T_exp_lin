@@ -7,5 +7,6 @@
 <!-- badges: end -->
 
 This is the repository for the paper entitled “Distinguishing between
-distributions. The case of the exponential and Lindley distributions”.
-In this repository you can find all R code used in the paper.
+the Exponential and Lindley distributions. An Illustration from
+Experimental Psychology”. In this repository you can find all R code
+used in the paper.
