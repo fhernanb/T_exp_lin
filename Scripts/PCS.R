@@ -1,3 +1,10 @@
+# In this script you can find the R function to obtain
+# the  probability of correct selection (PCS)
+# for the cases:
+# 1) Exp complete data
+# 2) Lin complete data
+# 1) Exp with censored data
+# 2) Lin with censored data
 
 # PCS for exponential with complete data
 PCS_exp_complete <- function(lambda, n) {

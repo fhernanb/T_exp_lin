@@ -1,7 +1,13 @@
+# In this script you can find the R code to replicate
+# Figure 1 
+# Illustration of hazard rate function shapes corresponding to 
+# different probability distributions:
+
 library(ggplot2)
 library(dplyr)
 
-# Create sequence of time points (using positive values to avoid issues with some distributions)
+# Create sequence of time points (using positive values to 
+avoid issues with some distributions)
 t <- seq(0.01, 25, by=0.1)
 
 # Function to calculate hazard rate for different distributions

@@ -1,11 +1,12 @@
+# In this script you can find the R code for the examples
+# shown in the Supplementary Material
 
 library(gamlss)      # To use dEXP dist
 library(RelDists)    # To use dLIN dist
 library(survival)    # To manage censored data
 
-# Here we have the main functions to perform the test
-#source("https://raw.githubusercontent.com/fhernanb/T_exp_lin/main/Scripts/exp_lin_test.R")
-
+# Here we have the main functions to perform the test:
+source("https://raw.githubusercontent.com/fhernanb/T_exp_lin/main/Scripts/exp_lin_test.R")
 
 # -------------------------------------------------------------------------
 # Example 1
